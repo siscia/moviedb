@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:18
+    restart: always
+    ports:
+        - "127.0.0.1:${PGPORT}:${PGPORT}"
+    volumes:
+      - postgres:/var/lib/postgresql
+    env_file:
+      - .env
+    environment:
+      - SERVICE_NAME=db
+    shm_size: 1g
+
+volumes:
+  postgres:
