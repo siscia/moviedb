@@ -30,6 +30,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # Packages
+    'pgvector.django',
+    'admin_numeric_filter',
 
     # Django
     'django.contrib.admin',
@@ -138,3 +140,7 @@ TIME_FORMAT = 'G:i'
 DATE_FORMAT = 'j M Y'
 DATETIME_FORMAT = 'j M Y, G:i T'
 NUMBER_GROUPING = 3
+
+
+OPENAI_EMBEDDING_MODEL = "text-embedding-3-large"
+OPENAI_EMBEDDING_DIM = 3072

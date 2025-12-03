@@ -1,16 +1,34 @@
 services:
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:8501:8501"
+    volumes:
+      # - ./src:/app/src  # uncomment for local development
+      - ./data:/app/data  # to persist data locally
+      # - data:/app/data  # persist data in Docker volume (production)
+    environment:
+      - SERVICE_NAME=streamlit
+      - PGHOST=postgres
+    env_file:
+      - .env
+    restart: no
+
   postgres:
-    image: postgres:18
+    image: pgvector/pgvector:pg18-trixie
     restart: always
     ports:
-        - "127.0.0.1:${PGPORT}:${PGPORT}"
+      - "127.0.0.1:${PGPORT}:${PGPORT}"
     volumes:
       - postgres:/var/lib/postgresql
     env_file:
       - .env
     environment:
-      - SERVICE_NAME=db
+      - SERVICE_NAME=postgres
     shm_size: 1g
 
 volumes:
   postgres:
+  data:
