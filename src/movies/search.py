@@ -8,7 +8,6 @@ import mlflow
 from core.settings import env
 from misc.utils.embedding import combine_query_and_user, get_user_embedding
 from .models import MotnGenre, MotnShow
-import math
 
 # TODO
 mlflow.set_tracking_uri("http://localhost:5000")
