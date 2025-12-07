@@ -7,9 +7,7 @@ import time
 from pathlib import Path
 
 import mlflow
-from mlflow.genai.scorers import RelevanceToQuery, scorer
-from mlflow.genai.judges import make_judge
-import environ
+from mlflow.genai.scorers import scorer
 import django
 from openai import AsyncOpenAI
 

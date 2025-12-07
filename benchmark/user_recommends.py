@@ -1,7 +1,6 @@
 import os
 import sys
 from pathlib import Path
-import random
 
 import django
 import mlflow
@@ -48,7 +47,6 @@ def predict_fn(user_embedding_context):
     Receives user_embedding_context.
     Can be a single embedding (list of floats) or a pandas Series (batch).
     """
-    import pandas as pd
     import numpy as np
 
     results = []
