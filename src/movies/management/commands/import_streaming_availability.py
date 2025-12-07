@@ -14,7 +14,6 @@ from django.core.management.base import BaseCommand, CommandError
 
 from core.settings import env
 from movies.models import MotnGenre, MotnShow, MotnShowGenre
-import re
 
 streaming_availability_filter_url = "https://streaming-availability.p.rapidapi.com/shows/search/filters"
 
