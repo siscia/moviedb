@@ -13,7 +13,14 @@ dependencies = [
     "torch>=2.9.1",
     "streamlit>=1.51.0",
     "openai>=2.8.1",
+    "mlflow>=3.6.0",
+    "python-dateutil>=2.9.0.post0",
 ]
 
 [[tool.uv.index]]
 url = "https://download.pytorch.org/whl/cpu"
+
+[tool.uv.workspace]
+members = [
+    "benchmark",
+]
