@@ -64,7 +64,7 @@ def export_run(run_id: str, output_dir: Path, experiment_name: Optional[str] = N
         artifacts_dir.mkdir(exist_ok=True)
         
         # Download artifacts from MLflow
-        artifact_path = client.download_artifacts(run_id, "", dst_path=str(artifacts_dir))
+        client.download_artifacts(run_id, "", dst_path=str(artifacts_dir))
         print(f"  ✓ Exported artifacts for run {run_id[:8]}")
     except Exception as e:
         print(f"  ⚠️  Could not export artifacts for run {run_id[:8]}: {e}")
