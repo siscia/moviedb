@@ -7,14 +7,15 @@ import mlflow
 import pandas as pd
 from mlflow.genai.scorers import scorer
 
-from movies.models import UserViewInteraction
-from misc.utils.embedding import calculate_user_embedding
-from movies.search import search_shows
-
 # Set up Django environment
 sys.path.append(str(Path(__file__).resolve().parent / ".." / "src"))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
+
+# Move Django-related imports here, after django.setup()
+from movies.models import UserViewInteraction
+from misc.utils.embedding import calculate_user_embedding
+from movies.search import search_shows
 
 
 # MLflow setup

@@ -10,9 +10,20 @@ import mlflow
 from mlflow.genai.scorers import scorer
 from openai import AsyncOpenAI
 
+
+# Add Django setup
+DJANGO_PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+if DJANGO_PROJECT_ROOT not in sys.path:
+    sys.path.append(DJANGO_PROJECT_ROOT)
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+
+import django  # noqa: E402
+django.setup()
+
+# Move Django-related imports here, after django.setup()
 from movies.search import search_shows
 from movies.models import MotnShow
-
 
 
 client = AsyncOpenAI()
