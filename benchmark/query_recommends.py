@@ -8,19 +8,23 @@ from pathlib import Path
 
 import mlflow
 from mlflow.genai.scorers import scorer
-import django
 from openai import AsyncOpenAI
 
-mlflow.set_experiment("query_recommends")
-mlflow.openai.autolog()
 
-sys.path.append(str(Path(__file__).resolve().parent / ".." / "src"))
+# Add Django setup
+DJANGO_PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+if DJANGO_PROJECT_ROOT not in sys.path:
+    sys.path.append(DJANGO_PROJECT_ROOT)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
+
+import django  # noqa: E402
 django.setup()
 
+# Move Django-related imports here, after django.setup()
 from movies.search import search_shows
 from movies.models import MotnShow
+
 
 client = AsyncOpenAI()
 
