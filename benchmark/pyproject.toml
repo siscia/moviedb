@@ -6,3 +6,8 @@ dependencies = [
     "mlflow>=3.6.0",
     "pyspark>=4.0.1",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.8.4",
+]
