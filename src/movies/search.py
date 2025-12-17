@@ -157,7 +157,9 @@ def search_shows(raw_query: str, top_k: int = 20, user=None, alpha: float = 0.5,
         .annotate(distance=CosineDistance("embedding", q_vec))
         .order_by("distance")[:200]
     )
-    computer_score(qs)
+    # TODO: compute_score requires 7 parameters (sim_user, sim_query, tmdb_rating, etc.)
+    # but is being called with a queryset. This needs proper implementation.
+    # compute_score(qs)
 
     return qs, structured
 
