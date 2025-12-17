@@ -172,7 +172,7 @@ def compute_score(
     genre_overlap: float,
 ) -> float:
     # Normalize / fallback
-    rating = (rating or 0.0) / 10.0      # 0..1
+    rating = (tmdb_rating or 0.0) / 10.0      # 0..1
     #votes = tmdb_vote_count or 0
     #popularity = math.log1p(votes) / 10.0     # squash big counts
 
