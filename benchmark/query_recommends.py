@@ -19,8 +19,8 @@ sys.path.append(str(Path(__file__).resolve().parent / ".." / "src"))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
 
-from movies.search import search_shows
-from movies.models import MotnShow
+from movies.search import search_shows  # noqa: E402
+from movies.models import MotnShow  # noqa: E402
 
 
 client = AsyncOpenAI()
