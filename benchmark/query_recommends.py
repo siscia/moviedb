@@ -11,6 +11,9 @@ from mlflow.genai.scorers import scorer
 import django
 from openai import AsyncOpenAI
 
+from movies.search import search_shows
+from movies.models import MotnShow
+
 mlflow.set_experiment("query_recommends")
 mlflow.openai.autolog()
 
@@ -19,8 +22,6 @@ sys.path.append(str(Path(__file__).resolve().parent / ".." / "src"))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
 
-from movies.search import search_shows
-from movies.models import MotnShow
 
 client = AsyncOpenAI()
 
