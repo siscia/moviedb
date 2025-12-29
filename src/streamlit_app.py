@@ -1,7 +1,6 @@
 import os
 import sys
 
-import django
 import mlflow
 import streamlit as st
 
@@ -17,6 +16,7 @@ def django_setup():
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 
+    import django  # noqa: PLC0415
     django.setup()
 
 django_setup()
