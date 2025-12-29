@@ -19,9 +19,6 @@ sys.path.append(str(Path(__file__).resolve().parent / ".." / "src"))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
 
-from movies.search import search_shows  # noqa: E402
-from movies.models import MotnShow  # noqa: E402
-
 
 client = AsyncOpenAI()
 
@@ -172,6 +169,8 @@ def _run_bulk_completions(show_texts):
 
 @mlflow.trace
 def generate_user_queries(concurrency=5, prefer_batch=False, target_count=1000):
+    from movies.models import MotnShow
+
     # Check how many shows already have relevant_queries
     existing_count = MotnShow.objects.exclude(relevant_queries=[]).count()
     
@@ -268,11 +267,15 @@ def rank_score(outputs, expectations) -> float:
 
 
 def predict_fn(query: str) -> list[str]:
+    from movies.search import search_shows
+
     qs, _ = search_shows(query, top_k=20)
     return [str(s) for s in qs]
 
 
 def evaluate_search_shows(target_count=100):
+    from movies.models import MotnShow
+
     shows = list(
         MotnShow.objects.exclude(relevant_queries=[]).order_by('?')[:target_count]
     )
