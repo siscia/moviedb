@@ -2,6 +2,7 @@ import os
 import sys
 from pathlib import Path
 
+import numpy as np
 import django
 import mlflow
 import pandas as pd
@@ -47,7 +48,6 @@ def predict_fn(user_embedding_context):
     Receives user_embedding_context.
     Can be a single embedding (list of floats) or a pandas Series (batch).
     """
-    import numpy as np
 
     results = []
     
