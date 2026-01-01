@@ -1,5 +1,6 @@
-from django.contrib import admin
 from admin_numeric_filter.admin import NumericFilterModelAdmin, RangeNumericFilter
+
+from django.contrib import admin
 
 from .models import ImdbGenre, ImdbMovie, ImdbTitleType, MotnShow
 

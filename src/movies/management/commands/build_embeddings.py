@@ -1,11 +1,14 @@
 from typing import Iterable
 
-from sentence_transformers import SentenceTransformer
-from django.core.management.base import BaseCommand, CommandParser
-from openai import OpenAI
-from movies.models import MotnShow
 from core.settings import env
+from openai import OpenAI
+from sentence_transformers import SentenceTransformer
+
 from django.conf import settings
+from django.core.management.base import BaseCommand, CommandParser
+
+from movies.models import MotnShow
+
 
 class Command(BaseCommand):
     help = "Compute embeddings for titles without embeddings"

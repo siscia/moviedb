@@ -2,19 +2,20 @@ import os
 import sys
 from pathlib import Path
 
-import numpy as np
-import django
 import mlflow
+import numpy as np
 import pandas as pd
 from mlflow.genai.scorers import scorer
+
+import django
 
 # Set up Django environment
 sys.path.append(str(Path(__file__).resolve().parent / ".." / "src"))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
 
-from movies.models import UserViewInteraction  # noqa: E402
 from misc.utils.embedding import calculate_user_embedding  # noqa: E402
+from movies.models import UserViewInteraction  # noqa: E402
 from movies.search import search_shows  # noqa: E402
 
 # MLflow setup

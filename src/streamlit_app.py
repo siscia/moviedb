@@ -23,6 +23,7 @@ django_setup()
 
 from movies.search import search_shows as _search_shows  # noqa: E402
 
+
 @st.cache_resource(show_spinner=False)
 def search_shows(*args, **kwargs):
     return _search_shows(*args, **kwargs)
