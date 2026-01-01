@@ -1,6 +1,11 @@
 import numpy as np
 from movies.models import UserViewInteraction
 
+# Rating constants for weight calculation
+RATING_WAY_UP = 2
+RATING_UP = 1
+RATING_DOWN = 0
+
 
 def calculate_user_embedding(interactions_data):
     """
@@ -30,11 +35,11 @@ def calculate_user_embedding(interactions_data):
         emb = np.array(show_emb, dtype=float)
         
         # Define a simple weight:
-        if rating == 2:  # way up
+        if rating == RATING_WAY_UP:
             w = 3.0
-        elif rating == 1:  # up
+        elif rating == RATING_UP:
             w = 2.0
-        elif rating == 0:  # down
+        elif rating == RATING_DOWN:
             w = 0.2
         else:
             w = 1.0
