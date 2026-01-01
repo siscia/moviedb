@@ -1,12 +1,13 @@
 import json
 
-from django.conf import settings
-from openai import OpenAI
-from pgvector.django import CosineDistance
 import mlflow
-
 from core.settings import env
 from misc.utils.embedding import combine_query_and_user, get_user_embedding
+from openai import OpenAI
+from pgvector.django import CosineDistance
+
+from django.conf import settings
+
 from .models import MotnGenre, MotnShow
 
 # TODO

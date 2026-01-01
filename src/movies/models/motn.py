@@ -1,7 +1,8 @@
+from pgvector.django import VectorField
+
 from django.conf import settings
 from django.contrib.postgres.fields.array import ArrayField
 from django.db import models
-from pgvector.django import VectorField
 
 
 class MotnShow(models.Model):
