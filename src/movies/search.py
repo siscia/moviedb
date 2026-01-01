@@ -157,8 +157,7 @@ def search_shows(raw_query: str, top_k: int = 20, user=None, alpha: float = 0.5,
         .annotate(distance=CosineDistance("embedding", q_vec))
         .order_by("distance")[:200]
     )
-    computer_score(qs)
-
+    
     return qs, structured
 
 
@@ -172,7 +171,7 @@ def compute_score(
     genre_overlap: float,
 ) -> float:
     # Normalize / fallback
-    rating = (rating or 0.0) / 10.0      # 0..1
+    rating = (tmdb_rating or 0.0) / 10.0      # 0..1
     #votes = tmdb_vote_count or 0
     #popularity = math.log1p(votes) / 10.0     # squash big counts
 

@@ -1,5 +1,6 @@
 from typing import Iterable
 
+from sentence_transformers import SentenceTransformer
 from django.core.management.base import BaseCommand, CommandParser
 from openai import OpenAI
 from movies.models import MotnShow
