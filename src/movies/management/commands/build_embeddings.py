@@ -1,5 +1,6 @@
 from typing import Iterable
 
+from sentence_transformers import SentenceTransformer
 from django.core.management.base import BaseCommand, CommandParser
 from openai import OpenAI
 from movies.models import MotnShow
@@ -61,7 +62,6 @@ class Command(BaseCommand):
             self.stdout.write(f"Processed {start + len(batch)}/{total}")
 
     def _embed_with_sentence_transformer(self, texts: Iterable[str]):
-        from sentence_transformers import SentenceTransformer
         if not hasattr(self, "_st_model"):
             self._st_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device="cpu")
 
