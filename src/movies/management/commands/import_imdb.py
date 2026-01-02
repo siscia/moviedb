@@ -12,6 +12,8 @@ DEFAULT_IMDB_URL = "https://datasets.imdbws.com/title.basics.tsv.gz"
 DEFAULT_BATCH_SIZE = 5_000
 UNKNOWN_GENRE = "Unknown"
 PROGRESS_LOG_INTERVAL = 100_000
+MAX_PERCENTAGE = 100
+PROGRESS_STEP = 5
 
 
 class Command(BaseCommand):
@@ -286,9 +288,9 @@ class Command(BaseCommand):
                 return
 
             downloaded = min(block_num * block_size, total_size)
-            percent = int(downloaded * 100 / total_size)
+            percent = int(downloaded * MAX_PERCENTAGE / total_size)
 
-            if percent >= 100 or percent - report.last_percent >= 5:
+            if percent >= MAX_PERCENTAGE or percent - report.last_percent >= PROGRESS_STEP:
                 mb_done = downloaded / (1024 * 1024)
                 mb_total = total_size / (1024 * 1024)
                 self.stdout.write(
