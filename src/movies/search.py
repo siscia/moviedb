@@ -1,4 +1,5 @@
 import json
+from dataclasses import dataclass
 
 import mlflow
 from core.settings import env
@@ -167,40 +168,43 @@ THUMBS_UP = 1
 THUMBS_DOWN = 0
 
 
-def compute_score(
-    sim_user: float,
-    sim_query: float,
-    tmdb_rating: float | None,
-    tmdb_vote_count: int | None,
-    watched: bool,
-    thumbs: int | None,
-    genre_overlap: float,
-) -> float:
+@dataclass
+class ScoreParams:
+    sim_user: float
+    sim_query: float
+    tmdb_rating: float | None
+    tmdb_vote_count: int | None
+    watched: bool
+    thumbs: int | None
+    genre_overlap: float
+
+
+def compute_score(params: ScoreParams) -> float:
     # Normalize / fallback
-    rating = (tmdb_rating or 0.0) / 10.0      # 0..1
-    #votes = tmdb_vote_count or 0
+    rating = (params.tmdb_rating or 0.0) / 10.0      # 0..1
+    #votes = params.tmdb_vote_count or 0
     #popularity = math.log1p(votes) / 10.0     # squash big counts
 
     # base from embeddings
-    score = 0.5 * sim_user + 0.3 * sim_query
+    score = 0.5 * params.sim_user + 0.3 * params.sim_query
 
     # quality prior
     score += 0.1 * rating
     #score += 0.05 * popularity
 
     # genre alignment (0..1)
-    score += 0.1 * genre_overlap
+    score += 0.1 * params.genre_overlap
 
     # user history adjustments
-    if watched:
+    if params.watched:
         score -= 0.5  # push watched items down but not out of the list
 
-    if thumbs is not None:
-        if thumbs == THUMBS_WAY_UP:   # way up
+    if params.thumbs is not None:
+        if params.thumbs == THUMBS_WAY_UP:   # way up
             score += 0.4
-        elif thumbs == THUMBS_UP: # up
+        elif params.thumbs == THUMBS_UP: # up
             score += 0.2
-        elif thumbs == THUMBS_DOWN: # down
+        elif params.thumbs == THUMBS_DOWN: # down
             score -= 0.7  # strong penalty
 
     return score
