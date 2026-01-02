@@ -147,10 +147,10 @@ class Command(BaseCommand):
 def load_shows_from_file(path: Path):
     with gzip.open(path, "rt", encoding="utf-8") as fh:
         for line in fh:
-            line = line.strip()
-            if not line:
+            stripped_line = line.strip()
+            if not stripped_line:
                 continue
-            yield json.loads(line)
+            yield json.loads(stripped_line)
 
 
 def paginated_request():
