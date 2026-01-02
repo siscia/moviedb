@@ -234,6 +234,9 @@ def parse_tmdb_id(value):
     return parse_int(match.group(1))
 
 
+MAX_RATING = 10
+
+
 def parse_rating(value):
     if value is None:
         return None
@@ -241,8 +244,8 @@ def parse_rating(value):
         rating = Decimal(str(value))
     except Exception:
         return None
-    if rating > 10:
-        rating = rating / Decimal("10")
+    if rating > MAX_RATING:
+        rating = rating / Decimal(str(MAX_RATING))
     try:
         return rating.quantize(Decimal("0.01"))
     except (InvalidOperation, ValueError):
