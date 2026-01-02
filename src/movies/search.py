@@ -162,6 +162,11 @@ def search_shows(raw_query: str, top_k: int = 20, user=None, alpha: float = 0.5,
     return qs, structured
 
 
+THUMBS_WAY_UP = 2
+THUMBS_UP = 1
+THUMBS_DOWN = 0
+
+
 def compute_score(
     sim_user: float,
     sim_query: float,
@@ -191,11 +196,11 @@ def compute_score(
         score -= 0.5  # push watched items down but not out of the list
 
     if thumbs is not None:
-        if thumbs == 2:   # way up
+        if thumbs == THUMBS_WAY_UP:   # way up
             score += 0.4
-        elif thumbs == 1: # up
+        elif thumbs == THUMBS_UP: # up
             score += 0.2
-        elif thumbs == 0: # down
+        elif thumbs == THUMBS_DOWN: # down
             score -= 0.7  # strong penalty
 
     return score
