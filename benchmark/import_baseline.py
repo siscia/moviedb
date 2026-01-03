@@ -165,7 +165,7 @@ def main():
     
     import_all_experiments(args.input_dir)
     
-    print("\n✅ Import complete! View results at: http://localhost:5000")
+    print("\n✅ Your results are available at: http://localhost:5000")
     print(f"   (Make sure MLflow UI is running: mlflow ui --backend-store-uri {MLFLOW_TRACKING_URI} --port 5000)")
 
 
