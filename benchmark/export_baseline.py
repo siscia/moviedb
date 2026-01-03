@@ -15,7 +15,6 @@ Usage:
 import argparse
 import json
 import os
-import shutil
 from pathlib import Path
 from typing import Optional
 
@@ -169,7 +168,7 @@ def main():
     
     print("\n✅ Export complete! You can now commit this directory to Git for collaborators to use.")
     print(f"   git add {args.output_dir}")
-    print(f"   git commit -m 'Add baseline: <description>'")
+    print("   git commit -m 'Add baseline: <description>'")
 
 
 if __name__ == "__main__":

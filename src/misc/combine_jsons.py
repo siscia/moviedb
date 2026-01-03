@@ -14,7 +14,6 @@ Usage:
 import argparse
 import gzip
 import json
-import os
 from pathlib import Path
 from typing import Iterable
 
