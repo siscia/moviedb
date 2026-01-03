@@ -29,14 +29,14 @@ BASELINE_DIR = Path(__file__).parent / "baseline"
 def export_run(run_id: str, output_dir: Path, experiment_name: Optional[str] = None):
     """Export a specific run to JSON format."""
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-    
+
     client = mlflow.MlflowClient()
     run = client.get_run(run_id)
-    
+
     # Create output directory for this run
     run_dir = output_dir / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Export run metadata
     run_data = {
         "info": {
@@ -53,43 +53,43 @@ def export_run(run_id: str, output_dir: Path, experiment_name: Optional[str] = N
             "tags": run.data.tags,
         },
     }
-    
+
     # Save run metadata
     with open(run_dir / "run.json", "w") as f:
         json.dump(run_data, f, indent=2)
-    
+
     # Try to copy artifacts (may fail if artifacts use mlflow-artifacts:// URIs)
     try:
         artifacts_dir = run_dir / "artifacts"
         artifacts_dir.mkdir(exist_ok=True)
-        
+
         # Download artifacts from MLflow
         client.download_artifacts(run_id, "", dst_path=str(artifacts_dir))
         print(f"  ✓ Exported artifacts for run {run_id[:8]}")
     except Exception as e:
         print(f"  ⚠️  Could not export artifacts for run {run_id[:8]}: {e}")
-    
+
     return run_data
 
 
 def export_experiment(experiment_name: str, output_dir: Path):
     """Export an entire experiment to the baseline directory."""
     mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-    
+
     client = mlflow.MlflowClient()
-    
+
     # Get experiment
     experiment = client.get_experiment_by_name(experiment_name)
     if not experiment:
         print(f"❌ Experiment '{experiment_name}' not found")
         return
-    
+
     print(f"Exporting experiment '{experiment_name}' (ID: {experiment.experiment_id})...")
-    
+
     # Create experiment directory
     exp_dir = output_dir / experiment_name.replace(" ", "_").replace("/", "_")
     exp_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Export experiment metadata
     exp_data = {
         "experiment_id": experiment.experiment_id,
@@ -98,23 +98,23 @@ def export_experiment(experiment_name: str, output_dir: Path):
         "lifecycle_stage": experiment.lifecycle_stage,
         "tags": experiment.tags,
     }
-    
+
     with open(exp_dir / "experiment.json", "w") as f:
         json.dump(exp_data, f, indent=2)
-    
+
     # Get all runs for this experiment
     runs = client.search_runs(
         experiment_ids=[experiment.experiment_id],
         filter_string="",
         run_view_type=ViewType.ACTIVE_ONLY,
     )
-    
+
     print(f"Found {len(runs)} runs to export...")
-    
+
     # Export each run
     runs_dir = exp_dir / "runs"
     runs_dir.mkdir(exist_ok=True)
-    
+
     exported_count = 0
     for run in runs:
         try:
@@ -123,7 +123,7 @@ def export_experiment(experiment_name: str, output_dir: Path):
             print(f"  ✓ Exported run {run.info.run_id[:8]} ({exported_count}/{len(runs)})")
         except Exception as e:
             print(f"  ⚠️  Failed to export run {run.info.run_id[:8]}: {e}")
-    
+
     print(f"\n✓ Successfully exported {exported_count}/{len(runs)} runs for experiment '{experiment_name}'")
     return exp_dir
 
@@ -132,7 +132,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Export MLflow experiments/runs to baseline directory for sharing"
     )
-    
+
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument(
         "--experiment",
@@ -142,22 +142,22 @@ def main():
         "--run-id",
         help="ID of the specific run to export"
     )
-    
+
     parser.add_argument(
         "--output-dir",
         type=Path,
         default=BASELINE_DIR,
         help=f"Output directory (default: {BASELINE_DIR})"
     )
-    
+
     args = parser.parse_args()
-    
+
     # Create output directory if it doesn't exist
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # Change to benchmark directory to ensure correct tracking URI resolution
     os.chdir(Path(__file__).parent)
-    
+
     if args.experiment:
         exp_dir = export_experiment(args.experiment, args.output_dir)
         if exp_dir:
@@ -165,7 +165,7 @@ def main():
     elif args.run_id:
         export_run(args.run_id, args.output_dir)
         print(f"\n📦 Run exported to: {args.output_dir.absolute() / args.run_id}")
-    
+
     print("\n✅ Export complete! You can now commit this directory to Git for collaborators to use.")
     print(f"   git add {args.output_dir}")
     print("   git commit -m 'Add baseline: <description>'")

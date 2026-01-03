@@ -51,7 +51,7 @@ def predict_fn(user_embedding_context):
     """
 
     results = []
-    
+
     # Determine if input is a batch (Series or list of lists) or single item (list of floats)
     is_batch = False
     if isinstance(user_embedding_context, pd.Series):
@@ -67,35 +67,35 @@ def predict_fn(user_embedding_context):
 
     for user_embedding in batch:
         # We search with a neutral query to rely on user embedding
-        # 'recommend' or empty string could be used. 
+        # 'recommend' or empty string could be used.
         # The user requested 'relevant recommendations', often implies 'what should I watch?'
         qs, _ = search_shows(
-            raw_query="recommend shows", 
-            top_k=50, 
+            raw_query="recommend shows",
+            top_k=50,
             user_embedding=user_embedding,
             alpha=0.2 # low alpha -> high weight on user embedding
         )
-        
+
         # Return list of IDs (strings or ints)
         results.append([s.id for s in qs])
-    
+
     if is_batch:
         return results
     else:
         # If input was single item, mlflow might expect single item result?
         # Usually predict_fn returns a list of size 1 if input size is 1.
-        # But if it wasn't a batch call... 
+        # But if it wasn't a batch call...
         # Let's return the list, usually safe.
         return results[0] # Wait, if it expects exact return matching return type...
         # If I return result[0], it's [id1, id2...]
         # If I return results, it's [[id1, id2...]]
         # If predict_fn returns string/list, and we used list, it should be fine.
-        
+
         # Actually, let's always return results (list of lists) if it's consistent.
         # But if `mlflow` called with `**sample_input` (one item), it captures the return.
         # If I return `[[ids]]` it might treat it as "result is list of ids".
         # If I return `[ids]` it might treat it as "result is list of ids".
-        
+
         # Let's look at `test.py`: returns `list[str]`.
         # So for one input, it returns ONE list of strings.
         # So I should return `[id1, id2...]` for a single input.
@@ -133,7 +133,7 @@ def build_evaluation_dataset(min_interactions=5):
             .order_by("last_date", "id")
         )
         inters_list = list(inters)
-        
+
         if len(inters_list) < min_interactions:
             continue
 
@@ -142,7 +142,7 @@ def build_evaluation_dataset(min_interactions=5):
         # The user's prompt suggested 80/20 split, then leave-one-out ranking for each test item.
         # Let's simple Leave-One-Out for the single most recent item, or a few recent items.
         # Let's do a 20% holdout.
-        
+
         split_idx = int(len(inters_list) * 0.8)
         train_inters = inters_list[:split_idx]
         test_inters = inters_list[split_idx:]
@@ -159,9 +159,9 @@ def build_evaluation_dataset(min_interactions=5):
                 "rating": i.rating,
                 "show": {"embedding": i.show.embedding}
             })
-        
+
         user_emb = calculate_user_embedding(train_data_for_calc)
-        
+
         if user_emb is None:
             continue
 
@@ -173,7 +173,7 @@ def build_evaluation_dataset(min_interactions=5):
             dataset.append({
                 "inputs": {"user_embedding_context": user_emb},
                 "expectations": {"target_show_id": test_item.show.id},
-                # Extra metadata can be top-level or in 'meta'? 
+                # Extra metadata can be top-level or in 'meta'?
                 # For now let's keep it simple.
             })
 
@@ -184,20 +184,20 @@ def run_evaluation():
     print("Building evaluation dataset...")
     data = build_evaluation_dataset()
     print(f"Generated {len(data)} evaluation samples.")
-    
+
     if not data:
         print("No data found. Exiting.")
         return
 
     # Pass list of dicts directly to mlflow.genai.evaluate
-    
+
     with mlflow.start_run(run_name="leave_one_out_eval"):
         results = mlflow.genai.evaluate(
             data=data,
             predict_fn=predict_fn,
             scorers=[hit_at_10, mrr],
         )
-        
+
         print("\nEvaluation Results:")
         print(results.metrics)
 
