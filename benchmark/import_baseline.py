@@ -8,7 +8,7 @@ It is typically run during project setup to load shared baseline experiments int
 Usage:
     # Import all baseline experiments
     uv run python benchmark/import_baseline.py
-    
+
     # Import from a specific directory
     uv run python benchmark/import_baseline.py --input-dir benchmark/baseline/custom
 """
