@@ -159,7 +159,7 @@ def search_shows(raw_query: str, top_k: int = 20, user=None, alpha: float = 0.5,
         .annotate(distance=CosineDistance("embedding", q_vec))
         .order_by("distance")[:200]
     )
-    
+
     return qs, structured
 
 

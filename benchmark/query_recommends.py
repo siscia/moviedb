@@ -174,15 +174,15 @@ def _run_bulk_completions(show_texts):
 def generate_user_queries(concurrency=5, prefer_batch=False, target_count=1000):
     # Check how many shows already have relevant_queries
     existing_count = MotnShow.objects.exclude(relevant_queries=[]).count()
-    
+
     if existing_count >= target_count:
         print(f"Already have {existing_count} shows with relevant_queries (target: {target_count}). Nothing to do.")
         return
-    
+
     # Calculate how many more we need
     needed = target_count - existing_count
     print(f"Found {existing_count} shows with relevant_queries. Generating for {needed} more to reach {target_count}.")
-    
+
     shows = list(
         MotnShow.objects.filter(relevant_queries=[]).prefetch_related("genres").order_by('?')[:needed]
     )

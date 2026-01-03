@@ -28,12 +28,12 @@ def calculate_user_embedding(interactions_data):
         else:
             rating = inter.rating
             show_emb = inter.show.embedding
-        
+
         if show_emb is None:
             continue
 
         emb = np.array(show_emb, dtype=float)
-        
+
         # Define a simple weight:
         if rating == RATING_WAY_UP:
             w = 3.0
@@ -72,7 +72,7 @@ def get_user_embedding(user_id: int, min_items: int = 3):
 
     if interactions.count() < min_items:
         return None  # not enough data – fall back to query-only
-        
+
     return calculate_user_embedding(interactions)
 
 
