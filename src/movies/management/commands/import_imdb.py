@@ -48,8 +48,6 @@ class Command(BaseCommand):
         dry_run: bool = options.get("dry_run", False)
         batch_size: int = options.get("batch_size", DEFAULT_BATCH_SIZE)
 
-        using_default_source = source is None
-
         if source and not source.exists():
             raise CommandError(f"Source path does not exist: {source}")
 
@@ -61,19 +59,7 @@ class Command(BaseCommand):
         if dry_run:
             self.stdout.write("Running in dry-run mode; no data will be saved.")
 
-        try:
-            total_rows, created_rows = self._process_file(source, batch_size, dry_run)
-        except (EOFError, OSError, gzip.BadGzipFile):
-            if not using_default_source:
-                raise
-
-            self.stdout.write(
-                self.style.WARNING(
-                    "Dataset read failed; re-downloading default dataset and retrying."
-                )
-            )
-            source = self._download_default_dataset(force_download=True)
-            total_rows, created_rows = self._process_file(source, batch_size, dry_run)
+        total_rows, created_rows = self._process_file(source, batch_size, dry_run)
 
         self.stdout.write(self.style.SUCCESS(f"Finished IMDb import. Rows read: {total_rows}, movies created: {created_rows}"))
 
