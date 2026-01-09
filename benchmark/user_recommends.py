@@ -12,9 +12,6 @@ sys.path.append(str(Path(__file__).resolve().parent / ".." / "src"))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
 
-from movies.models import UserViewInteraction
-from misc.utils.embedding import calculate_user_embedding
-from movies.search import search_shows
 
 # MLflow setup
 mlflow.set_tracking_uri("sqlite:///mlflow.db")
@@ -48,6 +45,8 @@ def predict_fn(user_embedding_context):
     Can be a single embedding (list of floats) or a pandas Series (batch).
     """
     import numpy as np
+
+    from movies.search import search_shows
 
     results = []
     
@@ -110,6 +109,9 @@ def build_evaluation_dataset(min_interactions=5):
         "expectations": {"target_show_id": ...}
     }
     """
+    from misc.utils.embedding import calculate_user_embedding
+    from movies.models import UserViewInteraction
+
     # 1. Fetch users with enough history
     users_with_history = (
         UserViewInteraction.objects
