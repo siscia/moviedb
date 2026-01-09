@@ -63,7 +63,7 @@ class Command(BaseCommand):
 
         try:
             total_rows, created_rows = self._process_file(source, batch_size, dry_run)
-        except (EOFError, OSError, gzip.BadGzipFile) as exc:
+        except (EOFError, OSError, gzip.BadGzipFile):
             if not using_default_source:
                 raise
 
