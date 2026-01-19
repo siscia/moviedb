@@ -12,9 +12,9 @@ sys.path.append(str(Path(__file__).resolve().parent / ".." / "src"))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "core.settings")
 django.setup()
 
-from movies.models import UserViewInteraction
-from misc.utils.embedding import calculate_user_embedding
-from movies.search import search_shows
+from movies.models import UserViewInteraction  # noqa: E402
+from misc.utils.embedding import calculate_user_embedding  # noqa: E402
+from movies.search import search_shows  # noqa: E402
 
 # MLflow setup
 mlflow.set_tracking_uri("sqlite:///mlflow.db")
