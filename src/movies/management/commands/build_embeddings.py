@@ -2,6 +2,8 @@ from typing import Iterable
 
 from django.core.management.base import BaseCommand, CommandParser
 from openai import OpenAI
+from sentence_transformers import SentenceTransformer
+
 from movies.models import MotnShow
 from core.settings import env
 from django.conf import settings
